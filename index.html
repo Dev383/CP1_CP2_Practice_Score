@@ -41,11 +41,17 @@
 
         async function fetchScore() {
             const handle = document.getElementById('handle').value;
-            const afterDate = document.getElementById('afterDate').value;
+            const afterDate = "2024-06-03";
             const courseType = document.querySelector('input[name="courseType"]:checked').value;
             try {
                 const score = await getPracticeProblemsRatings(handle, afterDate, courseType);
-                document.getElementById('score').innerText = `Total score: ${score}`;
+                if(score>50)
+                {
+                    document.getElementById('score').innerText = `Total score: ${score}\nCongrats you have fullfilled the requirement 🥳`;
+                }
+                else{
+                    document.getElementById('score').innerText = `Total score: ${score}\nYou need to practice more , Keep solving 💪`;
+                }
             } catch (error) {
                 document.getElementById('score').innerText = error.message;
             }

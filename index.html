@@ -6,7 +6,7 @@
     <title>Codeforces Practice Score</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script>
-        async function getPracticeProblemsRatings(handle, afterDate) {
+        async function getPracticeProblemsRatings(handle, afterDate, courseType) {
             const url = `https://codeforces.com/api/user.status?handle=${handle}`;
             const response = await fetch(url);
             const data = await response.json();
@@ -23,10 +23,16 @@
                     const rating = submission.problem.rating;
                     if (rating) {
                         let score = 0;
-                        if (rating >= 1000) {
-                            score = (rating - 1000) / 100 + 1;
+                        if (courseType === 'cp1') {
+                            if (rating >= 1000) {
+                                score = Math.floor((rating - 1000) / 100) + 1;
+                            }
+                        } else if (courseType === 'cp2') {
+                            if (rating >= 1200) {
+                                score = Math.floor((rating - 1200) / 100) + 1;
+                            }
                         }
-                        totalScore += Math.floor(score);
+                        totalScore += score;
                     }
                 }
             }
@@ -35,18 +41,11 @@
 
         async function fetchScore() {
             const handle = document.getElementById('handle').value;
-            const afterDate = "2024-06-03";
-            console.log(afterDate);
+            const afterDate = document.getElementById('afterDate').value;
+            const courseType = document.querySelector('input[name="courseType"]:checked').value;
             try {
-                const score = await getPracticeProblemsRatings(handle, afterDate);
-                if(score>50)
-                {
-                    document.getElementById('score').innerText = `Total score: ${score}\nCongrats you have fullfilled the requirement 🥳`;
-                }
-                else{
-                    document.getElementById('score').innerText = `Total score: ${score}\nYou need to practice more , Keep solving 💪`;
-                }
-                
+                const score = await getPracticeProblemsRatings(handle, afterDate, courseType);
+                document.getElementById('score').innerText = `Total score: ${score}`;
             } catch (error) {
                 document.getElementById('score').innerText = error.message;
             }
@@ -60,14 +59,22 @@
             <label for="handle">Codeforces Handle</label>
             <input type="text" class="form-control" id="handle" placeholder="Enter Codeforces handle">
         </div>
-        
+        <div class="form-group">
+            <label for="courseType">Course Type</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="courseType" id="cp1" value="cp2" checked>
+                <label class="form-check-label" for="default">CP1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="courseType" id="cp2" value="cp2">
+                <label class="form-check-label" for="cp2">CP2</label>
+            </div>
+        </div>
         <button class="btn btn-primary" onclick="fetchScore()">Get Score</button>
         <div class="mt-3">
             <p id="score"></p>
         </div>
-        <div>
-            <p>Support for CP2 would be added soon</p>  
-        </div>
+
     </div>
 </body>
 </html>

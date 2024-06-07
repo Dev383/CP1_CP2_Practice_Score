@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codeforces Practice Score</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        async function getPracticeProblemsRatings(handle, afterDate) {
+            const url = `https://codeforces.com/api/user.status?handle=${handle}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.status !== 'OK') {
+                throw new Error("Failed to fetch data from Codeforces API");
+            }
+            const submissions = data.result;
+            const afterTimestamp = new Date(afterDate).getTime() / 1000;
+            let totalScore = 0;
+            for (const submission of submissions) {
+                if (submission.verdict === 'OK' &&
+                    submission.creationTimeSeconds > afterTimestamp &&
+                    submission.author.participantType === 'PRACTICE') {
+                    const rating = submission.problem.rating;
+                    if (rating) {
+                        let score = 0;
+                        if (rating >= 1000) {
+                            score = (rating - 1000) / 100 + 1;
+                        }
+                        totalScore += Math.floor(score);
+                    }
+                }
+            }
+            return totalScore;
+        }
+
+        async function fetchScore() {
+            const handle = document.getElementById('handle').value;
+            const afterDate = "2024-06-03";
+            console.log(afterDate);
+            try {
+                const score = await getPracticeProblemsRatings(handle, afterDate);
+                if(score>50)
+                {
+                    document.getElementById('score').innerText = `Total score: ${score}\nCongrats you have fullfilled the requirement 🥳`;
+                }
+                else{
+                    document.getElementById('score').innerText = `Total score: ${score}\nYou need to practice more , Keep solving 💪`;
+                }
+                
+            } catch (error) {
+                document.getElementById('score').innerText = error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Codeforces Practice Score</h1>
+        <div class="form-group">
+            <label for="handle">Codeforces Handle</label>
+            <input type="text" class="form-control" id="handle" placeholder="Enter Codeforces handle">
+        </div>
+        
+        <button class="btn btn-primary" onclick="fetchScore()">Get Score</button>
+        <div class="mt-3">
+            <p id="score"></p>
+        </div>
+    </div>
+</body>
+</html>

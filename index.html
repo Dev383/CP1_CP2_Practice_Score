@@ -24,7 +24,6 @@
                     if (rating) {
                         let score = 0;
                         if (courseType === 'cp1') {
-                            if (courseType === 'cp1') {
                             if (rating >= 1000 && rating <= 1100) {
                                 score = 1;
                             } else if (rating >= 1200 && rating <= 1300) {
@@ -88,7 +87,7 @@
 
         async function fetchScore() {
             const handle = document.getElementById('handle').value;
-            let afterDate = "2024-06-03";
+            const afterDate = "2024-06-03";
             const courseType = document.querySelector('input[name="courseType"]:checked').value;
             if(courseType=='cp2')
             {

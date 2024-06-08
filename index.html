@@ -43,6 +43,10 @@
             const handle = document.getElementById('handle').value;
             const afterDate = "2024-06-03";
             const courseType = document.querySelector('input[name="courseType"]:checked').value;
+            if(courseType=='cp2')
+            {
+                afterDate="2024-05-31";
+            }
             try {
                 const score = await getPracticeProblemsRatings(handle, afterDate, courseType);
                 if(score>50)

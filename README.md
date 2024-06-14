@@ -1,4 +1,4 @@
-# CP1_SCORE
+# CP1_CP2_PRACTICE_SCORE
 A practice problem score calculator for cp1 and cp2
 
 

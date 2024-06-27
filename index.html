@@ -19,7 +19,7 @@
             for (const submission of submissions) {
                 if (submission.verdict === 'OK' &&
                     submission.creationTimeSeconds > afterTimestamp &&
-                    submission.author.participantType === 'PRACTICE') {
+                    (submission.author.participantType === 'PRACTICE' || submission.author.participantType === 'VIRTUAL')) {
                     const rating = submission.problem.rating;
                     if (rating) {
                         let score = 0;
@@ -89,8 +89,7 @@
             const handle = document.getElementById('handle').value;
             let afterDate = "2024-06-03";
             const courseType = document.querySelector('input[name="courseType"]:checked').value;
-            if(courseType=='cp2')
-            {
+            if(courseType=='cp2') {
                 afterDate="2024-05-31";
             }
             try {
@@ -125,7 +124,7 @@
             <label for="courseType">Course Type</label><br>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="courseType" id="cp1" value="cp1" checked>
-                <label class="form-check-label" for="default">CP1</label>
+                <label class="form-check-label" for="cp1">CP1</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="courseType" id="cp2" value="cp2">
